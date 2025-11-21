@@ -5,18 +5,19 @@
 
 class DoublyLinkedList {
 private:
-    Node* head; // node đầu
-    Node* tail; // node cuối
+    Node* head;
+    Node* tail;
 
 public:
     DoublyLinkedList();
+    ~DoublyLinkedList();
 
-    void append(std::string value);        // thêm cuối
-    void prepend(std::string value);       // thêm đầu
-    bool deleteNode(std::string value);    // xóa theo value
-    Node* findByIndex(int index);          // tìm theo chỉ số
-    void traverseForward();                // duyệt xuôi
-    void traverseBackward();               // duyệt ngược
+    void append(std::string value);
+    void prepend(std::string value);
+    bool deleteNode(std::string value);
+    Node* findByIndex(int index);
+    void traverseForward();
+    void traverseBackward();
 };
 
 #endif
