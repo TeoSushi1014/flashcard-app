@@ -5,59 +5,59 @@
 
 void printMenu() {
     std::cout << "\n=== FLASHCARD APP - DOUBLY LINKED LIST ===\n";
-    std::cout << "1. Thêm thẻ từ vựng vào cuối (append)\n";
-    std::cout << "2. Thêm thẻ từ vựng vào đầu (prepend)\n";
-    std::cout << "3. Xóa thẻ từ vựng (deleteNode)\n";
-    std::cout << "4. Tìm thẻ theo vị trí (findByIndex)\n";
-    std::cout << "5. Duyệt danh sách xuôi (traverseForward)\n";
-    std::cout << "6. Duyệt danh sách ngược (traverseBackward)\n";
-    std::cout << "7. Demo đầy đủ các chức năng\n";
-    std::cout << "0. Thoát\n";
-    std::cout << "Chọn: ";
+    std::cout << "1. Them the tu vung vao cuoi (append)\n";
+    std::cout << "2. Them the tu vung vao dau (prepend)\n";
+    std::cout << "3. Xoa the tu vung (deleteNode)\n";
+    std::cout << "4. Tim the theo vi tri (findByIndex)\n";
+    std::cout << "5. Duyet danh sach xuoi (traverseForward)\n";
+    std::cout << "6. Duyet danh sach nguoc (traverseBackward)\n";
+    std::cout << "7. Demo day du cac chuc nang\n";
+    std::cout << "0. Thoat\n";
+    std::cout << "Chon: ";
 }
 
 void demoFull(DoublyLinkedList& dll) {
-    std::cout << "\n=== DEMO ĐẦY ĐỦ CÁC CHỨC NĂNG ===\n\n";
+    std::cout << "\n=== DEMO DAY DU CAC CHUC NANG ===\n\n";
     
-    std::cout << "1. Thêm 3 thẻ vào cuối:\n";
+    std::cout << "1. Them 3 the vao cuoi:\n";
     dll.append("hello");
     dll.append("world");
     dll.append("goodbye");
-    std::cout << "   Danh sách sau khi append: ";
+    std::cout << "   Danh sach sau khi append: ";
     dll.traverseForward();
     
-    std::cout << "\n2. Thêm 1 thẻ vào đầu:\n";
+    std::cout << "\n2. Them 1 the vao dau:\n";
     dll.prepend("first");
-    std::cout << "   Danh sách sau khi prepend: ";
+    std::cout << "   Danh sach sau khi prepend: ";
     dll.traverseForward();
     
-    std::cout << "\n3. Duyệt xuôi:\n   ";
+    std::cout << "\n3. Duyet xuoi:\n   ";
     dll.traverseForward();
     
-    std::cout << "\n4. Duyệt ngược:\n   ";
+    std::cout << "\n4. Duyet nguoc:\n   ";
     dll.traverseBackward();
     
-    std::cout << "\n5. Tìm thẻ ở vị trí 2:\n";
+    std::cout << "\n5. Tim the o vi tri 2:\n";
     Node* found = dll.findByIndex(2);
     if (found) {
-        std::cout << "   Tìm thấy: " << found->data << std::endl;
+        std::cout << "   Tim thay: " << found->data << std::endl;
     } else {
-        std::cout << "   Không tìm thấy\n";
+        std::cout << "   Khong tim thay\n";
     }
     
-    std::cout << "\n6. Xóa thẻ 'world':\n";
+    std::cout << "\n6. Xoa the 'world':\n";
     if (dll.deleteNode("world")) {
-        std::cout << "   Đã xóa thành công!\n";
-        std::cout << "   Danh sách sau khi xóa: ";
+        std::cout << "   Da xoa thanh cong!\n";
+        std::cout << "   Danh sach sau khi xoa: ";
         dll.traverseForward();
     } else {
-        std::cout << "   Không tìm thấy để xóa\n";
+        std::cout << "   Khong tim thay de xoa\n";
     }
     
-    std::cout << "\n7. Duyệt ngược sau khi xóa:\n   ";
+    std::cout << "\n7. Duyet nguoc sau khi xoa:\n   ";
     dll.traverseBackward();
     
-    std::cout << "\n=== KẾT THÚC DEMO ===\n";
+    std::cout << "\n=== KET THUC DEMO ===\n";
 }
 
 int main() {
@@ -73,47 +73,47 @@ int main() {
         
         switch (choice) {
             case 1: {
-                std::cout << "Nhập từ vựng cần thêm vào cuối: ";
+                std::cout << "Nhap tu vung can them vao cuoi: ";
                 std::getline(std::cin, value);
                 dll.append(value);
-                std::cout << "Đã thêm '" << value << "' vào cuối danh sách.\n";
+                std::cout << "Da them '" << value << "' vao cuoi danh sach.\n";
                 break;
             }
             case 2: {
-                std::cout << "Nhập từ vựng cần thêm vào đầu: ";
+                std::cout << "Nhap tu vung can them vao dau: ";
                 std::getline(std::cin, value);
                 dll.prepend(value);
-                std::cout << "Đã thêm '" << value << "' vào đầu danh sách.\n";
+                std::cout << "Da them '" << value << "' vao dau danh sach.\n";
                 break;
             }
             case 3: {
-                std::cout << "Nhập từ vựng cần xóa: ";
+                std::cout << "Nhap tu vung can xoa: ";
                 std::getline(std::cin, value);
                 if (dll.deleteNode(value)) {
-                    std::cout << "Đã xóa '" << value << "' thành công!\n";
+                    std::cout << "Da xoa '" << value << "' thanh cong!\n";
                 } else {
-                    std::cout << "Không tìm thấy '" << value << "' trong danh sách.\n";
+                    std::cout << "Khong tim thay '" << value << "' trong danh sach.\n";
                 }
                 break;
             }
             case 4: {
-                std::cout << "Nhập vị trí cần tìm (bắt đầu từ 0): ";
+                std::cout << "Nhap vi tri can tim (bat dau tu 0): ";
                 std::cin >> index;
                 Node* found = dll.findByIndex(index);
                 if (found) {
-                    std::cout << "Tìm thấy tại vị trí " << index << ": " << found->data << std::endl;
+                    std::cout << "Tim thay tai vi tri " << index << ": " << found->data << std::endl;
                 } else {
-                    std::cout << "Không tìm thấy tại vị trí " << index << std::endl;
+                    std::cout << "Khong tim thay tai vi tri " << index << std::endl;
                 }
                 break;
             }
             case 5: {
-                std::cout << "Danh sách từ đầu đến cuối:\n";
+                std::cout << "Danh sach tu dau den cuoi:\n";
                 dll.traverseForward();
                 break;
             }
             case 6: {
-                std::cout << "Danh sách từ cuối về đầu:\n";
+                std::cout << "Danh sach tu cuoi ve dau:\n";
                 dll.traverseBackward();
                 break;
             }
@@ -123,11 +123,11 @@ int main() {
                 break;
             }
             case 0: {
-                std::cout << "Cảm ơn bạn đã sử dụng Flashcard App!\n";
+                std::cout << "Cam on ban da su dung Flashcard App!\n";
                 break;
             }
             default: {
-                std::cout << "Lựa chọn không hợp lệ. Vui lòng chọn lại.\n";
+                std::cout << "Lua chon khong hop le. Vui long chon lai.\n";
                 break;
             }
         }
