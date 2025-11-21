@@ -1,0 +1,202 @@
+// Set file encoding to UTF-8
+#pragma execution_character_set("utf-8")
+
+#include "pch.h"
+#include "DoublyLinkedList.h"
+#include <iostream>
+#include <sstream>
+#include <iomanip>
+
+DoublyLinkedList::DoublyLinkedList() {
+    head = nullptr;
+    tail = nullptr;
+    currentIndex = -1;
+    currentNode = nullptr;
+}
+
+DoublyLinkedList::~DoublyLinkedList() {
+    Node* current = head;
+    while (current) {
+        Node* next = current->next;
+        delete current;
+        current = next;
+    }
+    head = nullptr;
+    tail = nullptr;
+}
+
+void DoublyLinkedList::append(std::wstring value) {
+    Node* newNode = new Node(value);
+
+    if (!head) {
+        head = tail = newNode;
+        currentIndex = 0;
+        currentNode = head;
+        return;
+    }
+
+    tail->next = newNode;
+    newNode->prev = tail;
+    tail = newNode;
+}
+
+void DoublyLinkedList::prepend(std::wstring value) {
+    Node* newNode = new Node(value);
+
+    if (!head) {
+        head = tail = newNode;
+        currentIndex = 0;
+        currentNode = head;
+        return;
+    }
+
+    newNode->next = head;
+    head->prev = newNode;
+    head = newNode;
+    
+    // Update current index if needed
+    if (currentIndex >= 0) {
+        currentIndex++;
+    }
+}
+
+bool DoublyLinkedList::deleteNode(std::wstring value) {
+    Node* current = head;
+    int index = 0;
+
+    while (current) {
+        if (current->data == value) {
+            if (current == head) head = current->next;
+            if (current == tail) tail = current->prev;
+
+            if (current->prev) current->prev->next = current->next;
+            if (current->next) current->next->prev = current->prev;
+
+            // Update current index if needed
+            if (current == currentNode) {
+                if (current->next) {
+                    currentNode = current->next;
+                } else if (current->prev) {
+                    currentNode = current->prev;
+                    currentIndex--;
+                } else {
+                    currentNode = nullptr;
+                    currentIndex = -1;
+                }
+            } else if (index < currentIndex) {
+                currentIndex--;
+            }
+
+            delete current;
+            return true;
+        }
+        current = current->next;
+        index++;
+    }
+    return false;
+}
+
+Node* DoublyLinkedList::findByIndex(int index) {
+    Node* current = head;
+    int i = 0;
+
+    while (current) {
+        if (i == index) {
+            currentIndex = index;
+            currentNode = current;
+            return current;
+        }
+        current = current->next;
+        i++;
+    }
+    return nullptr;
+}
+
+void DoublyLinkedList::traverseForward() {
+    Node* current = head;
+    while (current) {
+        std::wcout << current->data << L" ";
+        current = current->next;
+    }
+    std::wcout << std::endl;
+}
+
+void DoublyLinkedList::traverseBackward() {
+    Node* current = tail;
+    while (current) {
+        std::wcout << current->data << L" ";
+        current = current->prev;
+    }
+    std::wcout << std::endl;
+}
+
+int DoublyLinkedList::getSize() {
+    int count = 0;
+    Node* current = head;
+    while (current) {
+        count++;
+        current = current->next;
+    }
+    return count;
+}
+
+Node* DoublyLinkedList::getCurrent() {
+    return currentNode;
+}
+
+void DoublyLinkedList::setCurrentIndex(int index) {
+    Node* found = findByIndex(index);
+    if (found) {
+        currentIndex = index;
+        currentNode = found;
+    }
+}
+
+int DoublyLinkedList::getCurrentIndex() {
+    return currentIndex;
+}
+
+std::wstring DoublyLinkedList::getAllCardsAsString() {
+    std::wostringstream oss;
+    Node* current = head;
+    int index = 0;
+    
+    if (!head) {
+        return L"Danh sách trống";
+    }
+    
+    while (current) {
+        oss << index << L". " << current->data;
+        if (current == currentNode) {
+            oss << L" ← (hiện tại)";
+        }
+        oss << L"\n";
+        current = current->next;
+        index++;
+    }
+    
+    return oss.str();
+}
+
+std::wstring DoublyLinkedList::getAllCardsAsStringReverse() {
+    std::wostringstream oss;
+    Node* current = tail;
+    int index = getSize() - 1;
+    
+    if (!tail) {
+        return L"Danh sách trống";
+    }
+    
+    while (current) {
+        oss << index << L". " << current->data;
+        if (current == currentNode) {
+            oss << L" ← (hiện tại)";
+        }
+        oss << L"\n";
+        current = current->prev;
+        index--;
+    }
+    
+    return oss.str();
+}
+

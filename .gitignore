@@ -1,102 +1,164 @@
-# Visual Studio caches & settings
-
+# Visual Studio / Visual Studio Code
 .vs/
-
-*.user
-
-*.vcxproj.user
-
+.vscode/
 *.suo
+*.user
+*.userosscache
+*.sln.docstates
+*.userprefs
 
-
-
-# VS FileContentIndex (tránh lỗi .vsidx bị khóa)
-
-**/FileContentIndex/
-
-*.vsidx
-
-
-
-# Build outputs
-
+# Build results
+[Dd]ebug/
+[Dd]ebugPublic/
+[Rr]elease/
+[Rr]eleases/
 x64/
-
 x86/
-
-[Oo]bj/
-
+[Ww][Ii][Nn]32/
+[Aa][Rr][Mm]/
+[Aa][Rr][Mm]64/
+bld/
 [Bb]in/
+[Oo]bj/
+[Ll]og/
+[Ll]ogs/
 
-*.obj
+# Visual Studio cache/options
+.vs/
+*.VC.db
+*.VC.VC.opendb
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
 
-*.pch
+# Visual Studio profiler
+*.psess
+*.vsp
+*.vspx
+*.sap
 
-*.pdb
+# Visual Studio Trace Files
+*.e2e
 
-*.ipdb
+# TFS
+$tf/
 
-*.iobj
+# ReSharper
+_ReSharper*/
+*.[Rr]e[Ss]harper
+*.DotSettings.user
 
-*.log
+# NuGet Packages
+*.nupkg
+*.snupkg
+**/packages/*
+!**/packages/build/
+!**/packages/*.props
+!**/packages/*.targets
+# Keep packages.config để biết project dùng packages nào
+# packages.config
 
+# NuGet Symbol Packages
+*.snupkg
 
+# NuGet v3's project.json files produces more ignorable files
+*.nuget.props
+*.nuget.targets
 
-# Intermediate & auto-generated
+# Windows App SDK / WinUI 3 Generated Files
+**/Generated Files/
+*.xbf
+*.g.h
+*.g.hpp
+*.g.cpp
+# Keep MainWindow.idl (source file, cần commit)
+!MainWindow.idl
 
-*.tlog
+# MSBuild Binary and Structured Log
+*.binlog
 
-*.ilk
+# .NET Core
+project.lock.json
+project.fragment.lock.json
+artifacts/
 
-*.idb
+# Windows image file caches
+Thumbs.db
+ehthumbs.db
 
-*.opendb
+# Folder config file
+Desktop.ini
 
+# Recycle Bin used on file shares
+$RECYCLE.BIN/
+
+# VS Code directories
+.vscode/
+
+# Mac desktop service store files
+.DS_Store
+
+# Temporary files
+*.tmp
+*.temp
+*.swp
+*~
+*.bak
 *.cache
 
-*.VC.db
+# Compiled files
+*.exe
+*.dll
+*.lib
+*.obj
+*.pdb
+*.ilk
+*.exp
+*.iobj
+*.ipdb
 
-*.VC.VC.opendb
+# Precompiled headers
+*.pch
+*.pdb
 
-Generated Files/
-
-
-
-# Packages/NuGet
-
-packages/
-
-packages.config
-
-
-
-# VS solution extras
-
-*.aps
-
-*.ncb
-
-*.sdf
-
-*.cachefile
-
-
-
-# Installer/artifacts
-
+# App packages
+*.appx
+*.appxbundle
+*.appxupload
 *.msix
-
 *.msixbundle
+*.msixupload
 
-AppPackages/
+# Test results
+TestResults/
+[Tt]est[Rr]esult*/
+*.trx
+*.coverage
+*.coveragexml
 
+# Local test files
+test.exe
+test_performance.exe
+
+# Documentation (nếu không muốn commit)
+*.docx
+*.pdf
+
+# Data files (nếu có)
+data.txt
+
+# IDE specific
+.idea/
+*.iml
+
+# WinUI 3 specific
+AppX/
 BundleArtifacts/
+PackageArtifacts/
 
+# Visual Studio solution user options
+*.slnx.user
 
-
-# OS / misc
-
-Thumbs.db
-
-*.DS_Store
-
+# Test executables (ignore all .exe, nhưng có thể giữ nếu cần)
+*.exe

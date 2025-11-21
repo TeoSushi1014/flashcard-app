@@ -8,11 +8,11 @@
   IgnorableNamespaces="uap rescap">
 
   <Identity
-    Name="d01fccf1-54d5-4624-93db-dde117406b37"
+    Name="683c6512-b60b-41f7-b891-307926a09c37"
     Publisher="CN=TeoSushi"
     Version="1.0.0.0" />
 
-  <mp:PhoneIdentity PhoneProductId="d01fccf1-54d5-4624-93db-dde117406b37" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
+  <mp:PhoneIdentity PhoneProductId="683c6512-b60b-41f7-b891-307926a09c37" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
 
   <Properties>
     <DisplayName>flashcard-app</DisplayName>
