@@ -126,12 +126,20 @@
     <ClInclude Include="MainWindow.xaml.h">
       <DependentUpon>MainWindow.xaml</DependentUpon>
     </ClInclude>
+    <ClInclude Include="FlashcardPage.xaml.h">
+      <DependentUpon>FlashcardPage.xaml</DependentUpon>
+    </ClInclude>
+    <ClInclude Include="SettingsPage.xaml.h">
+      <DependentUpon>SettingsPage.xaml</DependentUpon>
+    </ClInclude>
     <ClInclude Include="DoublyLinkedList.h" />
     <ClInclude Include="Node.h" />
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml" />
     <Page Include="MainWindow.xaml" />
+    <Page Include="FlashcardPage.xaml" />
+    <Page Include="SettingsPage.xaml" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -142,6 +150,13 @@
     </ClCompile>
     <ClCompile Include="MainWindow.xaml.cpp">
       <DependentUpon>MainWindow.xaml</DependentUpon>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="FlashcardPage.xaml.cpp">
+      <DependentUpon>FlashcardPage.xaml</DependentUpon>
+    </ClCompile>
+    <ClCompile Include="SettingsPage.xaml.cpp">
+      <DependentUpon>SettingsPage.xaml</DependentUpon>
     </ClCompile>
     <ClCompile Include="DoublyLinkedList.cpp" />
     <ClCompile Include="Node.cpp" />
@@ -151,6 +166,14 @@
     <Midl Include="MainWindow.idl">
       <SubType>Code</SubType>
       <DependentUpon>MainWindow.xaml</DependentUpon>
+    </Midl>
+    <Midl Include="FlashcardPage.idl">
+      <SubType>Code</SubType>
+      <DependentUpon>FlashcardPage.xaml</DependentUpon>
+    </Midl>
+    <Midl Include="SettingsPage.idl">
+      <SubType>Code</SubType>
+      <DependentUpon>SettingsPage.xaml</DependentUpon>
     </Midl>
   </ItemGroup>
   <ItemGroup>
