@@ -1,20 +1,20 @@
-hello|xin chào
-goodbye|tạm biệt
-please|làm ơn
-thank you|cảm ơn
-sorry|xin lỗi
-yes|vâng / có
-no|không
-how are you?|bạn khỏe không?
-good morning|chào buổi sáng
-good night|chúc ngủ ngon
-book|quyển sách
-computer|máy tính
-keyboard|bàn phím
-mouse|chuột máy tính
-phone|điện thoại
-water|nước
-food|thức ăn
-friend|bạn bè
-love|yêu
-study|học
+Hello;Xin chao
+Goodbye;Tam biet
+Thank you;Cam on
+Computer;May tinh
+Keyboard;Ban phim
+Mouse;Con chuot
+Screen;Man hinh
+Software;Phan mem
+Hardware;Phan cung
+Internet;Mang internet
+Algorithm;Thuat toan
+Variable;Bien so
+Function;Ham
+Loop;Vong lap
+Database;Co so du lieu
+Memory;Bo nho
+Network;Mang luoi
+Developer;Lap trinh vien
+Bug;Loi phan mem
+Success;Thanh cong

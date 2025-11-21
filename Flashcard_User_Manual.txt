@@ -1,0 +1,61 @@
+================================================================
+          HUONG DAN SU DUNG PHAN MEM FLASHCARD (C++)
+================================================================
+
+1. GIOI THIEU CHUNG
+-------------------
+Phan mem Flashcard giup nguoi dung on tap tu vung hoac kien thuc
+thong qua co che the hai mat (Mat truoc/Mat sau). Du lieu duoc
+luu tru va cap nhat truc tiep vao file van ban.
+
+2. YEU CAU HE THONG & CAI DAT
+-----------------------------
+- He dieu hanh: Windows (Do phan mem su dung thu vien windows.h).
+- Cau truc thu muc: De chuong trinh chay dung, cac file sau phai
+  nam chung trong mot thu muc:
+    + File chay (.exe) cua chuong trinh.
+    + File du lieu: data.txt
+
+3. CAU TRUC FILE DU LIEU (data.txt)
+-----------------------------------
+De them hoac sua noi dung the hoc, ban can mo file "data.txt" bang
+Notepad va nhap theo quy tac sau:
+
+    Mat_truoc;Mat_sau
+
+Quy tac quan trong:
+- Dung dau cham phay (;) de ngan cach giua cau hoi va cau tra loi.
+- Moi dong tuong ung voi mot the.
+- Khong de khoang trang thua o dong cuoi cung.
+
+Vi du:
+    Hello;Xin chao
+    Computer;May tinh
+    Software;Phan mem
+
+4. CAC PHIM CHUC NANG
+---------------------
+Khi chuong trinh dang chay, su dung cac phim sau de dieu khien
+(co the nhap chu hoa hoac chu thuong):
+
+[ F ] - Lat the (Flip)
+      Chuyen doi hien thi giua "Mat truoc" va "Mat sau" cua the
+      hien tai.
+
+[ N ] - Tiep theo (Next)
+      Chuyen sang the ke tiep. Neu dang o the cuoi cung, chuong
+      trinh se thong bao.
+
+[ P ] - Quay lai (Previous)
+      Quay lai the truoc do. Neu dang o the dau tien, chuong
+      trinh se thong bao.
+
+[ D ] - Xoa the (Delete)
+      Xoa the dang hien thi khoi danh sach.
+      LUU Y: Chuong trinh se tu dong cap nhat va LUU DE len file
+      data.txt ngay lap tuc. Du lieu da xoa khong the khoi phuc.
+
+[ Q ] - Thoat (Quit)
+      Dong chuong trinh.
+
+5. XU LY

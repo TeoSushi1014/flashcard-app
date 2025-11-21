@@ -2,14 +2,16 @@
 #define NODE_H
 
 #include <string>
+using namespace std;
 
-class Node {
-public:
-    std::string data;
-    Node* next;
+struct Node {
+    string front;
+    string back;
     Node* prev;
+    Node* next;
 
-    Node(std::string value);
+    Node(const string &f, const string &b)
+        : front(f), back(b), prev(nullptr), next(nullptr) {}
 };
 
 #endif
