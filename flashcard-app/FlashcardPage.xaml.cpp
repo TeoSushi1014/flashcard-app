@@ -367,10 +367,12 @@ namespace winrt::flashcard_app::implementation
         std::wstring findLine = L"Tìm:  " + std::to_wstring(findTime) + L" μs\n";
         result += findLine;
 
-        Node* firstCard = m_list->findByIndex(0);
-        if (firstCard) {
+        std::wstring tempCard = L"Temp for delete test";
+        m_list->append(tempCard);
+        Node* tempNode = m_list->findByIndex(m_list->getSize() - 1);
+        if (tempNode) {
             start = std::chrono::high_resolution_clock::now();
-            m_list->deleteNode(firstCard->data);
+            m_list->deleteNode(tempNode->data);
             end = std::chrono::high_resolution_clock::now();
             auto deleteTime = std::chrono::duration_cast<std::chrono::microseconds>(end - start).count();
             std::wstring deleteLine = L"Xóa:  " + std::to_wstring(deleteTime) + L" μs\n";
