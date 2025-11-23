@@ -338,13 +338,16 @@ namespace winrt::flashcard_app::implementation
         m_list.reset();
         m_list = std::make_unique<DoublyLinkedList>();
 
-        std::wstring result = L"📊 Test " + std::to_wstring(cardCount) + L" thẻ:\n\n";
+        // Dùng std::wstring cho TẤT CẢ string operations
+        std::wstring result;
+        result = L"📊 Test " + std::to_wstring(cardCount) + L" thẻ:\n\n";
 
         // Warm-up (optional but recommended)
         {
             DoublyLinkedList warmup;
             for (int i = 0; i < 100; i++) {
-                warmup.append(L"Warmup " + std::to_wstring(i));
+                std::wstring warmupStr = L"Warmup " + std::to_wstring(i);
+                warmup.append(warmupStr);
             }
         }
 
@@ -357,7 +360,8 @@ namespace winrt::flashcard_app::implementation
         auto end = std::chrono::high_resolution_clock::now();
         auto appendTime = std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
 
-        result += L"✓ Thêm: " + std::to_wstring(appendTime) + L" ms\n";
+        std::wstring insertLine = L"✓ Thêm: " + std::to_wstring(appendTime) + L" ms\n";
+        result += insertLine;
 
         // Test 2: Tìm thẻ giữa (Find) - O(n)
         start = std::chrono::high_resolution_clock::now();
@@ -365,7 +369,8 @@ namespace winrt::flashcard_app::implementation
         end = std::chrono::high_resolution_clock::now();
         auto findTime = std::chrono::duration_cast<std::chrono::microseconds>(end - start).count();
 
-        result += L"✓ Tìm:  " + std::to_wstring(findTime) + L" μs\n";
+        std::wstring findLine = L"✓ Tìm:  " + std::to_wstring(findTime) + L" μs\n";
+        result += findLine;
 
         // Test 3: Xóa thẻ đầu (Delete) - O(1)
         Node* firstCard = m_list->findByIndex(0);
@@ -374,7 +379,8 @@ namespace winrt::flashcard_app::implementation
             m_list->deleteNode(firstCard->data);
             end = std::chrono::high_resolution_clock::now();
             auto deleteTime = std::chrono::duration_cast<std::chrono::microseconds>(end - start).count();
-            result += L"✓ Xóa:  " + std::to_wstring(deleteTime) + L" μs\n";
+            std::wstring deleteLine = L"✓ Xóa:  " + std::to_wstring(deleteTime) + L" μs\n";
+            result += deleteLine;
         } else {
             result += L"✓ Xóa:  N/A\n";
         }
@@ -385,20 +391,20 @@ namespace winrt::flashcard_app::implementation
         result += L"• Find:   O(n)\n";
         result += L"• Delete: O(1)\n";
 
-        // Convert std::wstring to winrt::hstring
-        winrt::hstring hresult = result;
+        // CHỈ convert sang winrt::hstring khi cần dùng với WinRT APIs
+        winrt::hstring hresult(result);
         TestResultText().Text(hresult);
         UpdateUI();
 
+        // Tạo status message với std::wstring, rồi convert
+        std::wstring statusMsgStr;
         if (g_currentLanguage == AppLanguage::Vietnamese) {
-            std::wstring statusMsgStr = L"Đã hoàn tất test với " + std::to_wstring(cardCount) + L" thẻ";
-            winrt::hstring statusMsg = statusMsgStr;
-            ShowStatus(statusMsg, InfoBarSeverity::Success);
+            statusMsgStr = L"Đã hoàn tất test với " + std::to_wstring(cardCount) + L" thẻ";
         } else {
-            std::wstring statusMsgStr = L"Completed test with " + std::to_wstring(cardCount) + L" cards";
-            winrt::hstring statusMsg = statusMsgStr;
-            ShowStatus(statusMsg, InfoBarSeverity::Success);
+            statusMsgStr = L"Completed test with " + std::to_wstring(cardCount) + L" cards";
         }
+        winrt::hstring statusMsg(statusMsgStr);
+        ShowStatus(statusMsg, InfoBarSeverity::Success);
     }
 
     void FlashcardPage::Test10_Click([[maybe_unused]] winrt::Windows::Foundation::IInspectable const& sender, [[maybe_unused]] winrt::Microsoft::UI::Xaml::RoutedEventArgs const& args)
