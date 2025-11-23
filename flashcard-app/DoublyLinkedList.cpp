@@ -60,6 +60,49 @@ void DoublyLinkedList::prepend(std::wstring value) {
     }
 }
 
+bool DoublyLinkedList::insertAt(int index, std::wstring value) {
+    if (index < 0) return false;
+    
+    if (index == 0) {
+        prepend(value);
+        return true;
+    }
+    
+    Node* current = head;
+    int i = 0;
+    
+    while (current && i < index - 1) {
+        current = current->next;
+        i++;
+    }
+    
+    if (!current) {
+        if (i == index - 1) {
+            append(value);
+            return true;
+        }
+        return false;
+    }
+    
+    Node* newNode = new Node(value);
+    newNode->next = current->next;
+    newNode->prev = current;
+    
+    if (current->next) {
+        current->next->prev = newNode;
+    } else {
+        tail = newNode;
+    }
+    
+    current->next = newNode;
+    
+    if (currentIndex >= index) {
+        currentIndex++;
+    }
+    
+    return true;
+}
+
 bool DoublyLinkedList::deleteNode(std::wstring value) {
     Node* current = head;
     int index = 0;
@@ -94,6 +137,23 @@ bool DoublyLinkedList::deleteNode(std::wstring value) {
         index++;
     }
     return false;
+}
+
+bool DoublyLinkedList::deleteAt(int index) {
+    Node* node = findByIndex(index);
+    if (!node) return false;
+    return deleteNode(node->data);
+}
+
+Node* DoublyLinkedList::search(std::wstring value) {
+    Node* current = head;
+    while (current) {
+        if (current->data == value) {
+            return current;
+        }
+        current = current->next;
+    }
+    return nullptr;
 }
 
 Node* DoublyLinkedList::findByIndex(int index) {

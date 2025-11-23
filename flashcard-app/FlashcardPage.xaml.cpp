@@ -337,9 +337,6 @@ namespace winrt::flashcard_app::implementation
         m_list.reset();
         m_list = std::make_unique<DoublyLinkedList>();
 
-        std::wstring result;
-        result = L"Test " + std::to_wstring(cardCount) + L" thẻ:\n\n";
-
         {
             DoublyLinkedList warmup;
             for (int i = 0; i < 100; i++) {
@@ -348,44 +345,105 @@ namespace winrt::flashcard_app::implementation
             }
         }
 
+        std::wstring result;
+        result = L"Performance Test - " + std::to_wstring(cardCount) + L" thẻ:\n\n";
+
         auto start = std::chrono::high_resolution_clock::now();
+        auto end = std::chrono::high_resolution_clock::now();
+
+        start = std::chrono::high_resolution_clock::now();
         for (int i = 0; i < cardCount; i++) {
             std::wstring card = L"Thẻ số " + std::to_wstring(i + 1);
             m_list->append(card);
         }
-        auto end = std::chrono::high_resolution_clock::now();
-        auto appendTime = std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
-
-        std::wstring insertLine = L"Thêm: " + std::to_wstring(appendTime) + L" ms\n";
-        result += insertLine;
+        end = std::chrono::high_resolution_clock::now();
+        auto insertTailTime = std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
+        std::wstring insertTailLine = L"Thêm cuối: " + std::to_wstring(insertTailTime) + L" ms - O(1)\n";
+        result += insertTailLine;
 
         start = std::chrono::high_resolution_clock::now();
-        Node* midCard = m_list->findByIndex(cardCount / 2);
+        m_list->prepend(L"Thẻ đầu");
         end = std::chrono::high_resolution_clock::now();
-        auto findTime = std::chrono::duration_cast<std::chrono::microseconds>(end - start).count();
+        auto insertHeadTime = std::chrono::duration_cast<std::chrono::microseconds>(end - start).count();
+        std::wstring insertHeadLine = L"Thêm đầu: " + std::to_wstring(insertHeadTime) + L" μs - O(1)\n";
+        result += insertHeadLine;
 
-        std::wstring findLine = L"Tìm:  " + std::to_wstring(findTime) + L" μs\n";
-        result += findLine;
+        int middlePos = m_list->getSize() / 2;
+        start = std::chrono::high_resolution_clock::now();
+        m_list->insertAt(middlePos, L"Thẻ giữa");
+        end = std::chrono::high_resolution_clock::now();
+        auto insertMiddleTime = std::chrono::duration_cast<std::chrono::microseconds>(end - start).count();
+        std::wstring insertMiddleLine = L"Thêm giữa: " + std::to_wstring(insertMiddleTime) + L" μs - O(n)\n";
+        result += insertMiddleLine;
 
-        std::wstring tempCard = L"Temp for delete test";
-        m_list->append(tempCard);
-        Node* tempNode = m_list->findByIndex(m_list->getSize() - 1);
-        if (tempNode) {
+        start = std::chrono::high_resolution_clock::now();
+        Node* found = m_list->findByIndex(cardCount / 2);
+        end = std::chrono::high_resolution_clock::now();
+        auto findIndexTime = std::chrono::duration_cast<std::chrono::microseconds>(end - start).count();
+        std::wstring findIndexLine = L"Tìm theo vị trí: " + std::to_wstring(findIndexTime) + L" μs - O(n)\n";
+        result += findIndexLine;
+
+        std::wstring searchValue = L"Thẻ số " + std::to_wstring(cardCount / 2);
+        start = std::chrono::high_resolution_clock::now();
+        Node* searchResult = m_list->search(searchValue);
+        end = std::chrono::high_resolution_clock::now();
+        auto searchTime = std::chrono::duration_cast<std::chrono::microseconds>(end - start).count();
+        std::wstring searchLine = L"Tìm theo giá trị: " + std::to_wstring(searchTime) + L" μs - O(n)\n";
+        result += searchLine;
+
+        start = std::chrono::high_resolution_clock::now();
+        int count = 0;
+        for (int i = 0; i < m_list->getSize(); i++) {
+            Node* card = m_list->findByIndex(i);
+            if (card) count++;
+        }
+        end = std::chrono::high_resolution_clock::now();
+        auto traverseForwardTime = std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
+        std::wstring traverseForwardLine = L"Duyệt xuôi: " + std::to_wstring(traverseForwardTime) + L" ms - O(n)\n";
+        result += traverseForwardLine;
+
+        start = std::chrono::high_resolution_clock::now();
+        count = 0;
+        for (int i = m_list->getSize() - 1; i >= 0; i--) {
+            Node* card = m_list->findByIndex(i);
+            if (card) count++;
+        }
+        end = std::chrono::high_resolution_clock::now();
+        auto traverseBackwardTime = std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
+        std::wstring traverseBackwardLine = L"Duyệt ngược: " + std::to_wstring(traverseBackwardTime) + L" ms - O(n)\n";
+        result += traverseBackwardLine;
+
+        start = std::chrono::high_resolution_clock::now();
+        m_list->deleteNode(L"Thẻ đầu");
+        end = std::chrono::high_resolution_clock::now();
+        auto deleteHeadTime = std::chrono::duration_cast<std::chrono::microseconds>(end - start).count();
+        std::wstring deleteHeadLine = L"Xóa đầu: " + std::to_wstring(deleteHeadTime) + L" μs - O(1)\n";
+        result += deleteHeadLine;
+
+        int tailIndex = m_list->getSize() - 1;
+        Node* tailNode = m_list->findByIndex(tailIndex);
+        if (tailNode) {
             start = std::chrono::high_resolution_clock::now();
-            m_list->deleteNode(tempNode->data);
+            m_list->deleteNode(tailNode->data);
             end = std::chrono::high_resolution_clock::now();
-            auto deleteTime = std::chrono::duration_cast<std::chrono::microseconds>(end - start).count();
-            std::wstring deleteLine = L"Xóa:  " + std::to_wstring(deleteTime) + L" μs\n";
-            result += deleteLine;
-        } else {
-            result += L"Xóa:  N/A\n";
+            auto deleteTailTime = std::chrono::duration_cast<std::chrono::microseconds>(end - start).count();
+            std::wstring deleteTailLine = L"Xóa cuối: " + std::to_wstring(deleteTailTime) + L" μs - O(1)\n";
+            result += deleteTailLine;
         }
 
-        result += L"\n";
-        result += L"Big-O:\n";
-        result += L"Insert: O(1)\n";
-        result += L"Find:   O(n)\n";
-        result += L"Delete: O(1)\n";
+        middlePos = m_list->getSize() / 2;
+        Node* middleNode = m_list->findByIndex(middlePos);
+        if (middleNode) {
+            start = std::chrono::high_resolution_clock::now();
+            m_list->deleteNode(middleNode->data);
+            end = std::chrono::high_resolution_clock::now();
+            auto deleteMiddleTime = std::chrono::duration_cast<std::chrono::microseconds>(end - start).count();
+            std::wstring deleteMiddleLine = L"Xóa giữa: " + std::to_wstring(deleteMiddleTime) + L" μs - O(n)\n";
+            result += deleteMiddleLine;
+        }
+
+        result += L"\n--- Tóm tắt ---\n";
+        result += L"Số thẻ sau test: " + std::to_wstring(m_list->getSize()) + L" thẻ\n";
 
         winrt::hstring hresult(result);
         TestResultText().Text(hresult);
@@ -394,9 +452,9 @@ namespace winrt::flashcard_app::implementation
 
         std::wstring statusMsgStr;
         if (g_currentLanguage == AppLanguage::Vietnamese) {
-            statusMsgStr = L"Đã hoàn tất test với " + std::to_wstring(cardCount) + L" thẻ";
+            statusMsgStr = L"Đã hoàn tất test đầy đủ với " + std::to_wstring(cardCount) + L" thẻ";
         } else {
-            statusMsgStr = L"Completed test with " + std::to_wstring(cardCount) + L" cards";
+            statusMsgStr = L"Completed comprehensive test with " + std::to_wstring(cardCount) + L" cards";
         }
         winrt::hstring statusMsg(statusMsgStr);
         ShowStatus(statusMsg, InfoBarSeverity::Success);

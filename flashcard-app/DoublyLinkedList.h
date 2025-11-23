@@ -14,8 +14,11 @@ public:
 
     void append(std::wstring value);
     void prepend(std::wstring value);
+    bool insertAt(int index, std::wstring value);
     bool deleteNode(std::wstring value);
+    bool deleteAt(int index);
     Node* findByIndex(int index);
+    Node* search(std::wstring value);
     void traverseForward();
     void traverseBackward();
     
