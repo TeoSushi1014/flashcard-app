@@ -46,12 +46,12 @@ namespace winrt::flashcard_app::implementation
             FindCardSectionLabel().Text(L"Tìm thẻ");
             TraverseSectionLabel().Text(L"Duyệt danh sách");
             ListSectionLabel().Text(L"Danh sách thẻ");
-            PerformanceTestSectionLabel().Text(L"⚡ Performance Test");
-            PerformanceTestDescription().Text(L"Test hiệu năng với các kích thước khác nhau");
-            Test10Button().Content(winrt::box_value(L"🧪 Test 10"));
-            Test100Button().Content(winrt::box_value(L"🧪 Test 100"));
-            Test1000Button().Content(winrt::box_value(L"🧪 Test 1,000"));
-            Test10000Button().Content(winrt::box_value(L"🧪 Test 10,000"));
+            PerformanceTestSectionLabel().Text(L"Performance Test");
+            PerformanceTestDescription().Text(L"Test hieu nang voi cac kich thuoc khac nhau");
+            Test10Button().Content(winrt::box_value(L"Test 10"));
+            Test100Button().Content(winrt::box_value(L"Test 100"));
+            Test1000Button().Content(winrt::box_value(L"Test 1,000"));
+            Test10000Button().Content(winrt::box_value(L"Test 10,000"));
             TestResultText().Text(L"Chưa có kết quả test. Click nút test để bắt đầu.");
         }
         else
@@ -74,12 +74,12 @@ namespace winrt::flashcard_app::implementation
             FindCardSectionLabel().Text(L"Find card");
             TraverseSectionLabel().Text(L"Traverse list");
             ListSectionLabel().Text(L"Card list");
-            PerformanceTestSectionLabel().Text(L"⚡ Performance Test");
+            PerformanceTestSectionLabel().Text(L"Performance Test");
             PerformanceTestDescription().Text(L"Test performance with different sizes");
-            Test10Button().Content(winrt::box_value(L"🧪 Test 10"));
-            Test100Button().Content(winrt::box_value(L"🧪 Test 100"));
-            Test1000Button().Content(winrt::box_value(L"🧪 Test 1,000"));
-            Test10000Button().Content(winrt::box_value(L"🧪 Test 10,000"));
+            Test10Button().Content(winrt::box_value(L"Test 10"));
+            Test100Button().Content(winrt::box_value(L"Test 100"));
+            Test1000Button().Content(winrt::box_value(L"Test 1,000"));
+            Test10000Button().Content(winrt::box_value(L"Test 10,000"));
             TestResultText().Text(L"No test results yet. Click test button to start.");
         }
     }
@@ -334,15 +334,12 @@ namespace winrt::flashcard_app::implementation
     {
         if (!m_list) return;
 
-        // Tạo list mới cho test (clear old data)
         m_list.reset();
         m_list = std::make_unique<DoublyLinkedList>();
 
-        // Dùng std::wstring cho TẤT CẢ string operations
         std::wstring result;
-        result = L"📊 Test " + std::to_wstring(cardCount) + L" thẻ:\n\n";
+        result = L"Test " + std::to_wstring(cardCount) + L" the:\n\n";
 
-        // Warm-up (optional but recommended)
         {
             DoublyLinkedList warmup;
             for (int i = 0; i < 100; i++) {
@@ -351,62 +348,51 @@ namespace winrt::flashcard_app::implementation
             }
         }
 
-        // Test 1: Thêm thẻ (Insert) - O(1)
         auto start = std::chrono::high_resolution_clock::now();
         for (int i = 0; i < cardCount; i++) {
-            std::wstring card = L"Thẻ số " + std::to_wstring(i + 1);
+            std::wstring card = L"The so " + std::to_wstring(i + 1);
             m_list->append(card);
         }
         auto end = std::chrono::high_resolution_clock::now();
         auto appendTime = std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
 
-        std::wstring insertLine = L"✓ Thêm: " + std::to_wstring(appendTime) + L" ms\n";
+        std::wstring insertLine = L"Them: " + std::to_wstring(appendTime) + L" ms\n";
         result += insertLine;
 
-        // Test 2: Tìm thẻ giữa (Find) - O(n)
         start = std::chrono::high_resolution_clock::now();
         Node* midCard = m_list->findByIndex(cardCount / 2);
         end = std::chrono::high_resolution_clock::now();
         auto findTime = std::chrono::duration_cast<std::chrono::microseconds>(end - start).count();
 
-        std::wstring findLine = L"✓ Tìm:  " + std::to_wstring(findTime) + L" μs\n";
+        std::wstring findLine = L"Tim:  " + std::to_wstring(findTime) + L" us\n";
         result += findLine;
 
-        // Test 3: Xóa thẻ đầu (Delete) - O(1)
         Node* firstCard = m_list->findByIndex(0);
         if (firstCard) {
             start = std::chrono::high_resolution_clock::now();
             m_list->deleteNode(firstCard->data);
             end = std::chrono::high_resolution_clock::now();
             auto deleteTime = std::chrono::duration_cast<std::chrono::microseconds>(end - start).count();
-            std::wstring deleteLine = L"✓ Xóa:  " + std::to_wstring(deleteTime) + L" μs\n";
+            std::wstring deleteLine = L"Xoa:  " + std::to_wstring(deleteTime) + L" us\n";
             result += deleteLine;
         } else {
-            result += L"✓ Xóa:  N/A\n";
+            result += L"Xoa:  N/A\n";
         }
 
         result += L"\n";
         result += L"Big-O:\n";
-        result += L"• Insert: O(1)\n";
-        result += L"• Find:   O(n)\n";
-        result += L"• Delete: O(1)\n";
+        result += L"Insert: O(1)\n";
+        result += L"Find:   O(n)\n";
+        result += L"Delete: O(1)\n";
 
-        // CHỈ convert sang winrt::hstring khi cần dùng với WinRT APIs
         winrt::hstring hresult(result);
         TestResultText().Text(hresult);
         
-        // Clear hết thẻ sau khi test để tránh numbering bị lỗi
-        // (Sau test, list còn cardCount - 1 thẻ vì đã xóa 1 thẻ đầu trong test Delete)
-        // Reset lại list để đảm bảo numbering đúng khi user thêm thẻ mới
-        m_list.reset();
-        m_list = std::make_unique<DoublyLinkedList>();
-        
         UpdateUI();
 
-        // Tạo status message với std::wstring, rồi convert
         std::wstring statusMsgStr;
         if (g_currentLanguage == AppLanguage::Vietnamese) {
-            statusMsgStr = L"Đã hoàn tất test với " + std::to_wstring(cardCount) + L" thẻ";
+            statusMsgStr = L"Da hoan tat test voi " + std::to_wstring(cardCount) + L" the";
         } else {
             statusMsgStr = L"Completed test with " + std::to_wstring(cardCount) + L" cards";
         }
