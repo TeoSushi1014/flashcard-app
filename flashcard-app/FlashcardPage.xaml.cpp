@@ -394,6 +394,13 @@ namespace winrt::flashcard_app::implementation
         // CHỈ convert sang winrt::hstring khi cần dùng với WinRT APIs
         winrt::hstring hresult(result);
         TestResultText().Text(hresult);
+        
+        // Clear hết thẻ sau khi test để tránh numbering bị lỗi
+        // (Sau test, list còn cardCount - 1 thẻ vì đã xóa 1 thẻ đầu trong test Delete)
+        // Reset lại list để đảm bảo numbering đúng khi user thêm thẻ mới
+        m_list.reset();
+        m_list = std::make_unique<DoublyLinkedList>();
+        
         UpdateUI();
 
         // Tạo status message với std::wstring, rồi convert
