@@ -4,6 +4,7 @@
 #include "pch.h"
 #include "FlashcardPage.xaml.h"
 #include "LanguageConfig.h"
+#include <chrono>
 #if __has_include("FlashcardPage.g.cpp")
 #include "FlashcardPage.g.cpp"
 #endif
@@ -45,6 +46,13 @@ namespace winrt::flashcard_app::implementation
             FindCardSectionLabel().Text(L"Tìm thẻ");
             TraverseSectionLabel().Text(L"Duyệt danh sách");
             ListSectionLabel().Text(L"Danh sách thẻ");
+            PerformanceTestSectionLabel().Text(L"⚡ Performance Test");
+            PerformanceTestDescription().Text(L"Test hiệu năng với các kích thước khác nhau");
+            Test10Button().Content(winrt::box_value(L"🧪 Test 10"));
+            Test100Button().Content(winrt::box_value(L"🧪 Test 100"));
+            Test1000Button().Content(winrt::box_value(L"🧪 Test 1,000"));
+            Test10000Button().Content(winrt::box_value(L"🧪 Test 10,000"));
+            TestResultText().Text(L"Chưa có kết quả test. Click nút test để bắt đầu.");
         }
         else
         {
@@ -66,6 +74,13 @@ namespace winrt::flashcard_app::implementation
             FindCardSectionLabel().Text(L"Find card");
             TraverseSectionLabel().Text(L"Traverse list");
             ListSectionLabel().Text(L"Card list");
+            PerformanceTestSectionLabel().Text(L"⚡ Performance Test");
+            PerformanceTestDescription().Text(L"Test performance with different sizes");
+            Test10Button().Content(winrt::box_value(L"🧪 Test 10"));
+            Test100Button().Content(winrt::box_value(L"🧪 Test 100"));
+            Test1000Button().Content(winrt::box_value(L"🧪 Test 1,000"));
+            Test10000Button().Content(winrt::box_value(L"🧪 Test 10,000"));
+            TestResultText().Text(L"No test results yet. Click test button to start.");
         }
     }
 
@@ -313,6 +328,91 @@ namespace winrt::flashcard_app::implementation
         } else {
             ShowStatus(L"Traversed list from end to start", InfoBarSeverity::Informational);
         }
+    }
+
+    void FlashcardPage::TestPerformance(int cardCount)
+    {
+        if (!m_list) return;
+
+        // Tạo list mới cho test (clear old data)
+        m_list.reset();
+        m_list = std::make_unique<DoublyLinkedList>();
+
+        std::wstring result = L"📊 Test " + std::to_wstring(cardCount) + L" thẻ:\n\n";
+
+        // Warm-up (optional but recommended)
+        {
+            DoublyLinkedList warmup;
+            for (int i = 0; i < 100; i++) {
+                warmup.append(L"Warmup " + std::to_wstring(i));
+            }
+        }
+
+        // Test 1: Thêm thẻ (Insert) - O(1)
+        auto start = std::chrono::high_resolution_clock::now();
+        for (int i = 0; i < cardCount; i++) {
+            std::wstring card = L"Thẻ số " + std::to_wstring(i + 1);
+            m_list->append(card);
+        }
+        auto end = std::chrono::high_resolution_clock::now();
+        auto appendTime = std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
+
+        result += L"✓ Thêm: " + std::to_wstring(appendTime) + L" ms\n";
+
+        // Test 2: Tìm thẻ giữa (Find) - O(n)
+        start = std::chrono::high_resolution_clock::now();
+        Node* midCard = m_list->findByIndex(cardCount / 2);
+        end = std::chrono::high_resolution_clock::now();
+        auto findTime = std::chrono::duration_cast<std::chrono::microseconds>(end - start).count();
+
+        result += L"✓ Tìm:  " + std::to_wstring(findTime) + L" μs\n";
+
+        // Test 3: Xóa thẻ đầu (Delete) - O(1)
+        Node* firstCard = m_list->findByIndex(0);
+        if (firstCard) {
+            start = std::chrono::high_resolution_clock::now();
+            m_list->deleteNode(firstCard->data);
+            end = std::chrono::high_resolution_clock::now();
+            auto deleteTime = std::chrono::duration_cast<std::chrono::microseconds>(end - start).count();
+            result += L"✓ Xóa:  " + std::to_wstring(deleteTime) + L" μs\n";
+        } else {
+            result += L"✓ Xóa:  N/A\n";
+        }
+
+        result += L"\n";
+        result += L"Big-O:\n";
+        result += L"• Insert: O(1)\n";
+        result += L"• Find:   O(n)\n";
+        result += L"• Delete: O(1)\n";
+
+        TestResultText().Text(result);
+        UpdateUI();
+
+        if (g_currentLanguage == AppLanguage::Vietnamese) {
+            ShowStatus(L"Đã hoàn tất test với " + std::to_wstring(cardCount) + L" thẻ", InfoBarSeverity::Success);
+        } else {
+            ShowStatus(L"Completed test with " + std::to_wstring(cardCount) + L" cards", InfoBarSeverity::Success);
+        }
+    }
+
+    void FlashcardPage::Test10_Click([[maybe_unused]] winrt::Windows::Foundation::IInspectable const& sender, [[maybe_unused]] winrt::Microsoft::UI::Xaml::RoutedEventArgs const& args)
+    {
+        TestPerformance(10);
+    }
+
+    void FlashcardPage::Test100_Click([[maybe_unused]] winrt::Windows::Foundation::IInspectable const& sender, [[maybe_unused]] winrt::Microsoft::UI::Xaml::RoutedEventArgs const& args)
+    {
+        TestPerformance(100);
+    }
+
+    void FlashcardPage::Test1000_Click([[maybe_unused]] winrt::Windows::Foundation::IInspectable const& sender, [[maybe_unused]] winrt::Microsoft::UI::Xaml::RoutedEventArgs const& args)
+    {
+        TestPerformance(1000);
+    }
+
+    void FlashcardPage::Test10000_Click([[maybe_unused]] winrt::Windows::Foundation::IInspectable const& sender, [[maybe_unused]] winrt::Microsoft::UI::Xaml::RoutedEventArgs const& args)
+    {
+        TestPerformance(10000);
     }
 }
 

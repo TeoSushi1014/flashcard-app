@@ -229,6 +229,83 @@
                     </StackPanel>
                 </Border>
 
+                <!-- Performance Test Section -->
+                <Border Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
+                        CornerRadius="8"
+                        Padding="16"
+                        Margin="0,16,0,0"
+                        BorderThickness="1"
+                        BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}">
+                    <StackPanel Spacing="12">
+                        <StackPanel Orientation="Horizontal" Spacing="8">
+                            <FontIcon Glyph="&#xE7A7;" FontSize="16" Foreground="#0078D4"/>
+                            <TextBlock x:Name="PerformanceTestSectionLabel"
+                                       Text="⚡ Performance Test"
+                                       FontWeight="SemiBold"
+                                       FontSize="16"/>
+                        </StackPanel>
+                        
+                        <TextBlock x:Name="PerformanceTestDescription"
+                                   Text="Test hiệu năng với các kích thước khác nhau"
+                                   FontSize="12"
+                                   Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                                   TextWrapping="Wrap"/>
+                        
+                        <Grid ColumnSpacing="8">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            
+                            <Button x:Name="Test10Button"
+                                    Grid.Row="0" Grid.Column="0"
+                                    Content="🧪 Test 10"
+                                    Click="Test10_Click"
+                                    Style="{StaticResource AccentButtonStyle}"
+                                    Margin="0,0,0,8"/>
+                            
+                            <Button x:Name="Test100Button"
+                                    Grid.Row="0" Grid.Column="1"
+                                    Content="🧪 Test 100"
+                                    Click="Test100_Click"
+                                    Margin="0,0,0,8"/>
+                            
+                            <Button x:Name="Test1000Button"
+                                    Grid.Row="1" Grid.Column="0"
+                                    Content="🧪 Test 1,000"
+                                    Click="Test1000_Click"
+                                    Margin="0,0,0,8"/>
+                            
+                            <Button x:Name="Test10000Button"
+                                    Grid.Row="1" Grid.Column="1"
+                                    Content="🧪 Test 10,000"
+                                    Click="Test10000_Click"
+                                    Margin="0,0,0,8"/>
+                        </Grid>
+                        
+                        <!-- Results Display -->
+                        <Border Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
+                                CornerRadius="4"
+                                Padding="12"
+                                Margin="0,8,0,0"
+                                BorderThickness="1"
+                                BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}">
+                            <ScrollViewer MaxHeight="200" VerticalScrollBarVisibility="Auto">
+                                <TextBlock x:Name="TestResultText"
+                                           Text="Chưa có kết quả test. Click nút test để bắt đầu."
+                                           TextWrapping="Wrap"
+                                           FontFamily="Consolas"
+                                           FontSize="11"
+                                           Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
+                            </ScrollViewer>
+                        </Border>
+                    </StackPanel>
+                </Border>
+
             </StackPanel>
         </ScrollViewer>
     </Grid>
