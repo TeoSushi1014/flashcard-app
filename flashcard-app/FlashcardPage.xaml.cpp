@@ -385,13 +385,19 @@ namespace winrt::flashcard_app::implementation
         result += L"• Find:   O(n)\n";
         result += L"• Delete: O(1)\n";
 
-        TestResultText().Text(result);
+        // Convert std::wstring to winrt::hstring
+        winrt::hstring hresult = result;
+        TestResultText().Text(hresult);
         UpdateUI();
 
         if (g_currentLanguage == AppLanguage::Vietnamese) {
-            ShowStatus(L"Đã hoàn tất test với " + std::to_wstring(cardCount) + L" thẻ", InfoBarSeverity::Success);
+            std::wstring statusMsgStr = L"Đã hoàn tất test với " + std::to_wstring(cardCount) + L" thẻ";
+            winrt::hstring statusMsg = statusMsgStr;
+            ShowStatus(statusMsg, InfoBarSeverity::Success);
         } else {
-            ShowStatus(L"Completed test with " + std::to_wstring(cardCount) + L" cards", InfoBarSeverity::Success);
+            std::wstring statusMsgStr = L"Completed test with " + std::to_wstring(cardCount) + L" cards";
+            winrt::hstring statusMsg = statusMsgStr;
+            ShowStatus(statusMsg, InfoBarSeverity::Success);
         }
     }
 
