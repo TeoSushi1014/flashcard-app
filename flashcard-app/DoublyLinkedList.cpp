@@ -54,7 +54,6 @@ void DoublyLinkedList::prepend(std::wstring value) {
     head->prev = newNode;
     head = newNode;
     
-    // Update current index if needed
     if (currentIndex >= 0) {
         currentIndex++;
     }
@@ -115,7 +114,6 @@ bool DoublyLinkedList::deleteNode(std::wstring value) {
             if (current->prev) current->prev->next = current->next;
             if (current->next) current->next->prev = current->prev;
 
-            // Update current index if needed
             if (current == currentNode) {
                 if (current->next) {
                     currentNode = current->next;

@@ -5,7 +5,6 @@
 #include <vector>
 #include <iomanip>
 
-// Struct để lưu kết quả test theo chuẩn industry
 struct TestResult {
     int size;
     double insertTime;  // ms
@@ -13,23 +12,19 @@ struct TestResult {
     double deleteTime;  // μs
 };
 
-// Warm-up để tránh cold cache (best practice theo Microsoft)
 void WarmUp() {
     DoublyLinkedList warmupList;
     for (int i = 0; i < 100; i++) {
         warmupList.append("Warmup " + std::to_string(i));
     }
-    // List sẽ tự động cleanup khi ra khỏi scope
 }
 
-// Test performance cho một kích thước cụ thể
 TestResult TestPerformance(int cardCount) {
     TestResult result;
     result.size = cardCount;
     
     DoublyLinkedList list;
     
-    // Test 1: Insert (thêm vào cuối) - O(1)
     auto start = std::chrono::high_resolution_clock::now();
     for (int i = 0; i < cardCount; i++) {
         std::string card = "Question " + std::to_string(i) + " / Answer " + std::to_string(i);
@@ -38,14 +33,11 @@ TestResult TestPerformance(int cardCount) {
     auto end = std::chrono::high_resolution_clock::now();
     result.insertTime = std::chrono::duration<double, std::milli>(end - start).count();
     
-    // Test 2: Find (tìm thẻ giữa) - O(n)
     start = std::chrono::high_resolution_clock::now();
     auto midCard = list.findByIndex(cardCount / 2);
     end = std::chrono::high_resolution_clock::now();
     result.findTime = std::chrono::duration<double, std::micro>(end - start).count();
     
-    // Test 3: Delete (xóa thẻ đầu) - O(1) khi biết node
-    // Tìm thẻ đầu tiên để xóa
     Node* firstCard = list.findByIndex(0);
     if (firstCard) {
         start = std::chrono::high_resolution_clock::now();
@@ -59,7 +51,6 @@ TestResult TestPerformance(int cardCount) {
     return result;
 }
 
-// Hiển thị kết quả ra console
 void DisplayResults(const std::vector<TestResult>& results) {
     std::cout << "\n";
     std::cout << "════════════════════════════════════════════════════════════\n";
@@ -87,7 +78,6 @@ void DisplayResults(const std::vector<TestResult>& results) {
     std::cout << "════════════════════════════════════════════════════════════\n";
     std::cout << "\n";
     
-    // In chi tiết cho từng test
     for (const auto& r : results) {
         std::cout << "\n=== Test với " << r.size << " thẻ ===" << std::endl;
         std::cout << "Thời gian thêm: " << std::fixed << std::setprecision(4) << r.insertTime << " ms" << std::endl;
@@ -96,7 +86,6 @@ void DisplayResults(const std::vector<TestResult>& results) {
     }
 }
 
-// Export kết quả ra CSV file (cho báo cáo và vẽ biểu đồ)
 void ExportToCSV(const std::vector<TestResult>& results) {
     std::ofstream file("performance_results.csv");
     if (!file.is_open()) {
@@ -104,10 +93,8 @@ void ExportToCSV(const std::vector<TestResult>& results) {
         return;
     }
     
-    // Header
     file << "Size,Insert(ms),Find(μs),Delete(μs)\n";
     
-    // Data rows
     for (const auto& r : results) {
         file << r.size << ","
              << std::fixed << std::setprecision(4)
@@ -130,13 +117,11 @@ int main() {
     std::cout << "\n";
     std::cout << "Đang warm-up cache...\n";
     
-    // Warm-up phase (tránh cold cache skew results)
     WarmUp();
     
     std::cout << "Warm-up hoàn tất. Bắt đầu test...\n";
     std::cout << "\n";
     
-    // Test với 4 kích thước chuẩn: 10, 100, 1,000, 10,000
     std::vector<int> testSizes = {10, 100, 1000, 10000};
     std::vector<TestResult> results;
     
@@ -146,10 +131,8 @@ int main() {
         results.push_back(result);
     }
     
-    // Hiển thị kết quả
     DisplayResults(results);
     
-    // Export CSV
     ExportToCSV(results);
     
     std::cout << "\n";

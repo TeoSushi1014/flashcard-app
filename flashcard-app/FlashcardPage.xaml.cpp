@@ -19,7 +19,6 @@ namespace winrt::flashcard_app::implementation
         [[maybe_unused]] IInspectable const& sender,
         [[maybe_unused]] RoutedEventArgs const& args)
     {
-        // Update language texts when page is loaded
         UpdateLanguageTexts();
         UpdateUI();
     }
@@ -28,7 +27,6 @@ namespace winrt::flashcard_app::implementation
     {
         if (g_currentLanguage == AppLanguage::Vietnamese)
         {
-            // Vietnamese texts
             AddToEndButton().Content(winrt::box_value(L"Thêm cuối"));
             AddToStartButton().Content(winrt::box_value(L"Thêm đầu"));
             DeleteButton().Content(winrt::box_value(L"Xóa"));
@@ -56,7 +54,6 @@ namespace winrt::flashcard_app::implementation
         }
         else
         {
-            // English texts
             AddToEndButton().Content(winrt::box_value(L"Add to end"));
             AddToStartButton().Content(winrt::box_value(L"Add to front"));
             DeleteButton().Content(winrt::box_value(L"Delete"));
@@ -100,7 +97,6 @@ namespace winrt::flashcard_app::implementation
         int size = m_list->getSize();
 
         if (current && currentIdx >= 0) {
-            // Dùng trực tiếp std::wstring, không cần convert
             CurrentCardText().Text(current->data);
             if (g_currentLanguage == AppLanguage::Vietnamese) {
                 winrt::hstring indexText = L"Vị trí: " + winrt::to_hstring(currentIdx) + L"/" + winrt::to_hstring(size - 1);
@@ -119,7 +115,6 @@ namespace winrt::flashcard_app::implementation
             }
         }
 
-        // Update list display
         if (size == 0) {
             if (g_currentLanguage == AppLanguage::Vietnamese) {
                 ListDisplay().Text(L"Danh sách trống");
@@ -298,7 +293,6 @@ namespace winrt::flashcard_app::implementation
                 ListDisplay().Text(L"List is empty");
             }
         } else {
-            // Dùng trực tiếp std::wstring, không cần convert
             ListDisplay().Text(m_list->getAllCardsAsString());
         }
         if (g_currentLanguage == AppLanguage::Vietnamese) {
@@ -320,7 +314,6 @@ namespace winrt::flashcard_app::implementation
                 ListDisplay().Text(L"List is empty");
             }
         } else {
-            // Dùng trực tiếp std::wstring, không cần convert
             ListDisplay().Text(m_list->getAllCardsAsStringReverse());
         }
         if (g_currentLanguage == AppLanguage::Vietnamese) {
