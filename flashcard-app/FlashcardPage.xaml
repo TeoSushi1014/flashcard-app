@@ -299,7 +299,7 @@
                                            Text="Chưa có kết quả test. Click nút test để bắt đầu."
                                            TextWrapping="Wrap"
                                            FontFamily="Consolas"
-                                           FontSize="11"
+                                           FontSize="13"
                                            Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
                             </ScrollViewer>
                         </Border>
