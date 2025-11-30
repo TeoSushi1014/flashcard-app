@@ -1,10 +1,10 @@
-// Set file encoding to UTF-8
 #pragma execution_character_set("utf-8")
 
 #include "pch.h"
 #include "FlashcardPage.xaml.h"
 #include "LanguageConfig.h"
 #include <chrono>
+#include <winrt/Windows.ApplicationModel.DataTransfer.h>
 #if __has_include("FlashcardPage.g.cpp")
 #include "FlashcardPage.g.cpp"
 #endif
@@ -12,6 +12,7 @@
 using namespace winrt;
 using namespace Microsoft::UI::Xaml;
 using namespace Microsoft::UI::Xaml::Controls;
+using namespace winrt::Windows::ApplicationModel::DataTransfer;
 
 namespace winrt::flashcard_app::implementation
 {
@@ -51,6 +52,7 @@ namespace winrt::flashcard_app::implementation
             Test1000Button().Content(winrt::box_value(L"Test 1,000"));
             Test10000Button().Content(winrt::box_value(L"Test 10,000"));
             TestResultText().Text(L"Chưa có kết quả test. Click nút test để bắt đầu.");
+            CopyResultsButton().Content(winrt::box_value(L"Copy"));
         }
         else
         {
@@ -78,6 +80,7 @@ namespace winrt::flashcard_app::implementation
             Test1000Button().Content(winrt::box_value(L"Test 1,000"));
             Test10000Button().Content(winrt::box_value(L"Test 10,000"));
             TestResultText().Text(L"No test results yet. Click test button to start.");
+            CopyResultsButton().Content(winrt::box_value(L"Copy"));
         }
     }
 
@@ -122,7 +125,6 @@ namespace winrt::flashcard_app::implementation
                 ListDisplay().Text(L"List is empty");
             }
         } else {
-            // Dùng trực tiếp std::wstring, không cần convert
             ListDisplay().Text(m_list->getAllCardsAsString());
         }
     }
@@ -471,6 +473,30 @@ namespace winrt::flashcard_app::implementation
     void FlashcardPage::Test10000_Click([[maybe_unused]] winrt::Windows::Foundation::IInspectable const& sender, [[maybe_unused]] winrt::Microsoft::UI::Xaml::RoutedEventArgs const& args)
     {
         TestPerformance(10000);
+    }
+
+    void FlashcardPage::CopyResults_Click([[maybe_unused]] winrt::Windows::Foundation::IInspectable const& sender, [[maybe_unused]] winrt::Microsoft::UI::Xaml::RoutedEventArgs const& args)
+    {
+        winrt::hstring resultText = TestResultText().Text();
+        
+        if (resultText.empty() || resultText == L"Chưa có kết quả test. Click nút test để bắt đầu." || resultText == L"No test results yet. Click test button to start.") {
+            if (g_currentLanguage == AppLanguage::Vietnamese) {
+                ShowStatus(L"Không có dữ liệu để copy", InfoBarSeverity::Warning);
+            } else {
+                ShowStatus(L"No data to copy", InfoBarSeverity::Warning);
+            }
+            return;
+        }
+
+        DataPackage dataPackage;
+        dataPackage.SetText(resultText);
+        Clipboard::SetContent(dataPackage);
+
+        if (g_currentLanguage == AppLanguage::Vietnamese) {
+            ShowStatus(L"Đã copy kết quả test vào clipboard", InfoBarSeverity::Success);
+        } else {
+            ShowStatus(L"Test results copied to clipboard", InfoBarSeverity::Success);
+        }
     }
 }
 

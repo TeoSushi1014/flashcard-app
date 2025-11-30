@@ -303,6 +303,13 @@
                                            Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
                             </ScrollViewer>
                         </Border>
+                        
+                        <Button x:Name="CopyResultsButton"
+                                Content="Copy"
+                                Click="CopyResults_Click"
+                                HorizontalAlignment="Stretch"
+                                Margin="0,8,0,0"
+                                Style="{StaticResource AccentButtonStyle}"/>
                     </StackPanel>
                 </Border>
 
