@@ -1,4 +1,3 @@
-// Set file encoding to UTF-8
 #pragma execution_character_set("utf-8")
 
 #include "pch.h"
