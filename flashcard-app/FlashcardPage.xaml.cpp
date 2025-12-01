@@ -31,6 +31,7 @@ namespace winrt::flashcard_app::implementation
             AddToEndButton().Content(winrt::box_value(L"Thêm cuối"));
             AddToStartButton().Content(winrt::box_value(L"Thêm đầu"));
             DeleteButton().Content(winrt::box_value(L"Xóa"));
+            DeleteCurrentButton().Content(winrt::box_value(L"Xóa thẻ hiện tại"));
             FindButton().Content(winrt::box_value(L"Tìm"));
             PreviousButtonText().Text(L"Trước");
             NextButtonText().Text(L"Sau");
@@ -45,6 +46,9 @@ namespace winrt::flashcard_app::implementation
             FindCardSectionLabel().Text(L"Tìm thẻ");
             TraverseSectionLabel().Text(L"Duyệt danh sách");
             ListSectionLabel().Text(L"Danh sách thẻ");
+            EditCardSectionLabel().Text(L"Sửa thẻ");
+            EditCardInput().PlaceholderText(L"Nhập nội dung mới...");
+            EditButton().Content(winrt::box_value(L"Sửa"));
             PerformanceTestSectionLabel().Text(L"Performance Test");
             PerformanceTestDescription().Text(L"Test hiệu năng với các kích thước khác nhau");
             Test10Button().Content(winrt::box_value(L"Test 10"));
@@ -59,6 +63,7 @@ namespace winrt::flashcard_app::implementation
             AddToEndButton().Content(winrt::box_value(L"Add to end"));
             AddToStartButton().Content(winrt::box_value(L"Add to front"));
             DeleteButton().Content(winrt::box_value(L"Delete"));
+            DeleteCurrentButton().Content(winrt::box_value(L"Delete current card"));
             FindButton().Content(winrt::box_value(L"Find"));
             PreviousButtonText().Text(L"Previous");
             NextButtonText().Text(L"Next");
@@ -73,6 +78,9 @@ namespace winrt::flashcard_app::implementation
             FindCardSectionLabel().Text(L"Find card");
             TraverseSectionLabel().Text(L"Traverse list");
             ListSectionLabel().Text(L"Card list");
+            EditCardSectionLabel().Text(L"Edit card");
+            EditCardInput().PlaceholderText(L"Enter new content...");
+            EditButton().Content(winrt::box_value(L"Edit"));
             PerformanceTestSectionLabel().Text(L"Performance Test");
             PerformanceTestDescription().Text(L"Test performance with different sizes");
             Test10Button().Content(winrt::box_value(L"Test 10"));
@@ -260,6 +268,26 @@ namespace winrt::flashcard_app::implementation
         }
     }
 
+    void FlashcardPage::DeleteCurrent_Click([[maybe_unused]] winrt::Windows::Foundation::IInspectable const& sender, [[maybe_unused]] winrt::Microsoft::UI::Xaml::RoutedEventArgs const& args)
+    {
+        if (!m_list) return;
+
+        if (m_list->deleteCurrent()) {
+            UpdateUI();
+            if (g_currentLanguage == AppLanguage::Vietnamese) {
+                ShowStatus(L"Đã xóa thẻ hiện tại", InfoBarSeverity::Success);
+            } else {
+                ShowStatus(L"Deleted current card successfully", InfoBarSeverity::Success);
+            }
+        } else {
+            if (g_currentLanguage == AppLanguage::Vietnamese) {
+                ShowStatus(L"Không có thẻ hiện tại để xóa", InfoBarSeverity::Error);
+            } else {
+                ShowStatus(L"No current card to delete", InfoBarSeverity::Error);
+            }
+        }
+    }
+
     void FlashcardPage::Find_Click([[maybe_unused]] winrt::Windows::Foundation::IInspectable const& sender, [[maybe_unused]] winrt::Microsoft::UI::Xaml::RoutedEventArgs const& args)
     {
         if (!m_list) return;
@@ -279,6 +307,39 @@ namespace winrt::flashcard_app::implementation
                 ShowStatus(L"Không tìm thấy thẻ tại vị trí " + winrt::to_hstring(index), InfoBarSeverity::Error);
             } else {
                 ShowStatus(L"Card not found at position " + winrt::to_hstring(index), InfoBarSeverity::Error);
+            }
+        }
+    }
+
+    void FlashcardPage::Edit_Click([[maybe_unused]] winrt::Windows::Foundation::IInspectable const& sender, [[maybe_unused]] winrt::Microsoft::UI::Xaml::RoutedEventArgs const& args)
+    {
+        if (!m_list) return;
+
+        winrt::hstring input = EditCardInput().Text();
+        std::wstring newValue{ input };
+
+        if (newValue.empty()) {
+            if (g_currentLanguage == AppLanguage::Vietnamese) {
+                ShowStatus(L"Vui lòng nhập nội dung mới", InfoBarSeverity::Warning);
+            } else {
+                ShowStatus(L"Please enter new content", InfoBarSeverity::Warning);
+            }
+            return;
+        }
+
+        if (m_list->updateCurrent(newValue)) {
+            EditCardInput().Text(L"");
+            UpdateUI();
+            if (g_currentLanguage == AppLanguage::Vietnamese) {
+                ShowStatus(L"Đã cập nhật thẻ hiện tại", InfoBarSeverity::Success);
+            } else {
+                ShowStatus(L"Updated current card successfully", InfoBarSeverity::Success);
+            }
+        } else {
+            if (g_currentLanguage == AppLanguage::Vietnamese) {
+                ShowStatus(L"Không có thẻ hiện tại để sửa", InfoBarSeverity::Error);
+            } else {
+                ShowStatus(L"No current card to update", InfoBarSeverity::Error);
             }
         }
     }
@@ -387,25 +448,17 @@ namespace winrt::flashcard_app::implementation
         result += searchLine;
 
         start = std::chrono::high_resolution_clock::now();
-        int count = 0;
-        for (int i = 0; i < m_list->getSize(); i++) {
-            Node* card = m_list->findByIndex(i);
-            if (card) count++;
-        }
+        int forwardCount = m_list->traverseForwardCount();
         end = std::chrono::high_resolution_clock::now();
-        auto traverseForwardTime = std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
-        std::wstring traverseForwardLine = L"Duyệt xuôi: " + std::to_wstring(traverseForwardTime) + L" ms - O(n)\n";
+        auto traverseForwardTime = std::chrono::duration_cast<std::chrono::microseconds>(end - start).count();
+        std::wstring traverseForwardLine = L"Duyệt xuôi: " + std::to_wstring(traverseForwardTime) + L" μs - O(n)\n";
         result += traverseForwardLine;
 
         start = std::chrono::high_resolution_clock::now();
-        count = 0;
-        for (int i = m_list->getSize() - 1; i >= 0; i--) {
-            Node* card = m_list->findByIndex(i);
-            if (card) count++;
-        }
+        int backwardCount = m_list->traverseBackwardCount();
         end = std::chrono::high_resolution_clock::now();
-        auto traverseBackwardTime = std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
-        std::wstring traverseBackwardLine = L"Duyệt ngược: " + std::to_wstring(traverseBackwardTime) + L" ms - O(n)\n";
+        auto traverseBackwardTime = std::chrono::duration_cast<std::chrono::microseconds>(end - start).count();
+        std::wstring traverseBackwardLine = L"Duyệt ngược: " + std::to_wstring(traverseBackwardTime) + L" μs - O(n)\n";
         result += traverseBackwardLine;
 
         start = std::chrono::high_resolution_clock::now();

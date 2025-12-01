@@ -22,13 +22,18 @@ public:
     void traverseForward();
     void traverseBackward();
     
-    // Helper methods for UI
+    int traverseForwardCount();
+    int traverseBackwardCount();
+    
     int getSize();
     Node* getCurrent();
     void setCurrentIndex(int index);
     int getCurrentIndex();
     std::wstring getAllCardsAsString();
     std::wstring getAllCardsAsStringReverse();
+    
+    bool updateCurrent(const std::wstring& newValue);
+    bool deleteCurrent();
     
 private:
     int currentIndex;

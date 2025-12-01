@@ -187,6 +187,26 @@ void DoublyLinkedList::traverseBackward() {
     std::wcout << std::endl;
 }
 
+int DoublyLinkedList::traverseForwardCount() {
+    int count = 0;
+    Node* current = head;
+    while (current) {
+        count++;
+        current = current->next;
+    }
+    return count;
+}
+
+int DoublyLinkedList::traverseBackwardCount() {
+    int count = 0;
+    Node* current = tail;
+    while (current) {
+        count++;
+        current = current->prev;
+    }
+    return count;
+}
+
 int DoublyLinkedList::getSize() {
     int count = 0;
     Node* current = head;
@@ -255,5 +275,48 @@ std::wstring DoublyLinkedList::getAllCardsAsStringReverse() {
     }
     
     return oss.str();
+}
+
+bool DoublyLinkedList::updateCurrent(const std::wstring& newValue) {
+    if (currentNode == nullptr) {
+        return false;
+    }
+    currentNode->data = newValue;
+    return true;
+}
+
+bool DoublyLinkedList::deleteCurrent() {
+    if (currentNode == nullptr) {
+        return false;
+    }
+    
+    Node* node = currentNode;
+    
+    if (node == head) {
+        head = node->next;
+    }
+    if (node == tail) {
+        tail = node->prev;
+    }
+    
+    if (node->prev != nullptr) {
+        node->prev->next = node->next;
+    }
+    if (node->next != nullptr) {
+        node->next->prev = node->prev;
+    }
+    
+    if (node->next != nullptr) {
+        currentNode = node->next;
+    } else if (node->prev != nullptr) {
+        currentNode = node->prev;
+        currentIndex--;
+    } else {
+        currentNode = nullptr;
+        currentIndex = -1;
+    }
+    
+    delete node;
+    return true;
 }
 

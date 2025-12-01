@@ -9,20 +9,17 @@
     mc:Ignorable="d"
     Loaded="Page_Loaded">
 
-    <!-- Main Grid -->
     <Grid x:Name="RootGrid" Padding="24">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="2*"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
-        <!-- Left: Card Display Area -->
         <StackPanel Grid.Column="0" 
                     Spacing="20"
                     VerticalAlignment="Center"
                     HorizontalAlignment="Center">
 
-            <!-- Flashcard Card -->
             <Border x:Name="FlashcardCard"
                     Width="500"
                     MinHeight="300"
@@ -79,18 +76,15 @@
                 </Button>
             </StackPanel>
 
-            <!-- Status Bar -->
             <InfoBar x:Name="StatusBar"
                      IsOpen="False"
                      Severity="Informational"
                      Message="Sẵn sàng"/>
         </StackPanel>
 
-        <!-- Right: Control Panel -->
         <ScrollViewer Grid.Column="1">
             <StackPanel Spacing="16" Padding="16">
 
-                <!-- Add Card Section -->
                 <Border Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
                         CornerRadius="8"
                         Padding="16"
@@ -123,7 +117,6 @@
                     </StackPanel>
                 </Border>
 
-                <!-- Delete Card Section -->
                 <Border Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
                         CornerRadius="8"
                         Padding="16"
@@ -146,10 +139,41 @@
                                 HorizontalAlignment="Stretch"
                                 Background="#C42B1C"
                                 Foreground="White"/>
+                        
+                        <Button x:Name="DeleteCurrentButton"
+                                Content="Xóa thẻ hiện tại"
+                                Click="DeleteCurrent_Click"
+                                HorizontalAlignment="Stretch"
+                                Background="#E65100"
+                                Foreground="White"/>
                     </StackPanel>
                 </Border>
 
-                <!-- Find Card Section -->
+                <Border Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
+                        CornerRadius="8"
+                        Padding="16"
+                        BorderThickness="1"
+                        BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}">
+                    <StackPanel Spacing="12">
+                        <StackPanel Orientation="Horizontal" Spacing="8">
+                            <FontIcon Glyph="&#xE70F;" FontSize="16" Foreground="#0078D4"/>
+                            <TextBlock x:Name="EditCardSectionLabel"
+                                       Text="Sửa thẻ"
+                                       FontWeight="SemiBold"/>
+                        </StackPanel>
+                        
+                        <TextBox x:Name="EditCardInput"
+                                 PlaceholderText="Nhập nội dung mới..."
+                                 MaxLength="100"/>
+                        
+                        <Button x:Name="EditButton"
+                                Content="Sửa"
+                                Click="Edit_Click"
+                                HorizontalAlignment="Stretch"
+                                Style="{StaticResource AccentButtonStyle}"/>
+                    </StackPanel>
+                </Border>
+
                 <Border Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
                         CornerRadius="8"
                         Padding="16"
@@ -175,7 +199,6 @@
                     </StackPanel>
                 </Border>
 
-                <!-- Traverse Section -->
                 <Border Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
                         CornerRadius="8"
                         Padding="16"
@@ -208,7 +231,6 @@
                     </StackPanel>
                 </Border>
 
-                <!-- List Display -->
                 <Border Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
                         CornerRadius="8"
                         Padding="16"
@@ -229,7 +251,6 @@
                     </StackPanel>
                 </Border>
 
-                <!-- Performance Test Section -->
                 <Border Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
                         CornerRadius="8"
                         Padding="16"
@@ -287,7 +308,6 @@
                                     Margin="0,0,0,8"/>
                         </Grid>
                         
-                        <!-- Results Display -->
                         <Border Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
                                 CornerRadius="4"
                                 Padding="12"
