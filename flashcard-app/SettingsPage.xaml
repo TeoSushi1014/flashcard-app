@@ -12,7 +12,6 @@
     <Grid Padding="24">
         <StackPanel Spacing="24">
 
-            <!-- Ngôn ngữ -->
             <StackPanel Spacing="8">
                 <TextBlock x:Name="LanguageTitle"
                            Text="Ngôn ngữ / Language"
@@ -27,7 +26,6 @@
                 </ComboBox>
             </StackPanel>
 
-            <!-- Dev info -->
             <StackPanel Spacing="4">
                 <TextBlock x:Name="DeveloperTitle"
                            Text="Thông tin người phát triển"

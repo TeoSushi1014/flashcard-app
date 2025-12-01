@@ -6,6 +6,5 @@ enum class AppLanguage
     English
 };
 
-// Biến global đơn giản
 inline AppLanguage g_currentLanguage = AppLanguage::Vietnamese;
 
